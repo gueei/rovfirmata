@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html>
   <head>
-	
+	<style>
+		html, body{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			border: 0;
+		}
+		#dashboard {
+			display: block;
+			z-index: -1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+	</style>
+	<script src="jquery.js"></script>
   </head>
   <body>
+  <script src="hm.js"></script>
   <script src="bundle.js"></script>
+  <script src="app.js"></script>
   <!-- <script type="text/javascript" src="app.js"></script> -->
     <div>Hello, world!</div>
+	<div id="hardware">
+		<select id="selPorts">
+		</select>
+		<button id="btnRefresh">refresh</button>
+		<button id="btnConnect">connect</button>
+		<button id="btnDisconnect">disconnect</button>
+	</div>
+	<canvas id="dashboard"></canvas>
   </body>
 </html>
