@@ -24,6 +24,7 @@
 	</style>
 	<script src="angular.min.js"></script>
     <script src="bundle.js"></script>
+    <script src="hm.js"></script>
 	<script src="controller.js"></script>
   </head>
   <body ng-controller="FirmataCtrl">
@@ -43,7 +44,11 @@
 			ng-click="disconnect()"
 			ng-disabled="board==null"
 		>disconnect</button>
-		<select id="selGamepad">
+		<select ng-model="gamepadId">
+			<option
+				ng-repeat="gp in gamepads track by $index"
+				ng-if="gp!=null"
+				value="{{gp.index}}">{{gp.id}}</option>
 		</select>
 	</div>
 	<div id="testPanel">
@@ -65,6 +70,6 @@
 			</li>
 		</ul>
 	</div>
-	<canvas id="dashboard"></canvas>
+	<canvas id="dashboard" ng-draw="draw()" width="1000" height="1000"></canvas>
   </body>
 </html>

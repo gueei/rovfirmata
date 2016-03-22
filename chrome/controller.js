@@ -1,9 +1,10 @@
-var firmataApp = angular.module("firmataApp", []);
+var firmataApp = angular.module("firmataApp", ["hm"]);
 
 var serialPort = document.hardware.serialPort;
 var Board = document.hardware.Board;
 
-firmataApp.controller("FirmataCtrl", function($scope){
+firmataApp.controller("FirmataCtrl", function($scope, $window, hmservice){
+	//console.log(hm);
 	$scope.Name = "FJDSKLFJ";
 	$scope.ports = [];
 	$scope.selectedPort = null;
@@ -28,10 +29,11 @@ firmataApp.controller("FirmataCtrl", function($scope){
 				s.$apply();
 			});
 			// setupTestPanel(board);
-			//document.hm.setup(board);
-			// draw();
+			setTimeout( () => {hmservice.setup($scope.board);$scope.draw();}, 500);
+			
 		});
 	}
+	
 	$scope.disconnect = function(){
 		if($scope.board!=null){
 			$scope.board.sp.close();
@@ -53,5 +55,23 @@ firmataApp.controller("FirmataCtrl", function($scope){
 		// $scope.board.reportDigitalPin(idx, 1);
 		$scope.board.pinMode(idx, parseInt(mode));
 	}
+	
+	$scope.draw = function(){
+		var context = document.getElementById("dashboard").getContext("2d");
+		var gp = navigator.getGamepads()[$scope.gamepadId];
+		hmservice.draw(context, gp);
+		$scope.$apply();
+		window.setTimeout($scope.draw, 50);
+	}
+	
 	$scope.board = null;
+	
+	$scope.gamepadId = {};
+	$scope.gamepads = [];
+	angular.element($window).on("gamepadconnected", function(e){
+		console.log("gamepad found");
+		$scope.gamepads = navigator.getGamepads();
+		console.log($scope.gamepads);
+		$scope.$apply();
+	});
 });
