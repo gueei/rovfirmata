@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html ng-app="firmataApp">
+  <head>
+	<style>
+		html, body{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			border: 0;
+		}
+		#dashboard {
+			display: block;
+			z-index: -1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+		}
+		#pinList li{
+			display: inline-block;
+			width: 100px;
+		}
+	</style>
+	<script src="angular.min.js"></script>
+    <script src="bundle.js"></script>
+	<script src="controller.js"></script>
+  </head>
+  <body ng-controller="FirmataCtrl">
+    <div>{{ Name }}</div>
+	<div id="hardware" ng-init="refreshPorts()">
+		<select ng-model="selectedPort">
+			<option 
+				ng-repeat="port in ports" 
+				value="{{port.comName}}">{{port.comName}}</option>
+		</select>
+		<button ng-click="refreshPorts()">refresh</button>
+		<button
+			ng-click="connect(selectedPort)"
+			ng-disabled="selectedPort==null || board!=null"
+		>connect</button>
+		<button
+			ng-click="disconnect()"
+			ng-disabled="board==null"
+		>disconnect</button>
+		<select id="selGamepad">
+		</select>
+	</div>
+	<div id="testPanel">
+		<ul id="pinList">
+			<li ng-repeat="pin in pins">
+				<input
+					ng-model="pin.reporting"
+					ng-change="pinReport($index, pin.reporting, pin.analogChannel)"
+					type="checkbox"/>
+				<span>pin: {{$index}}</span>
+				<span>( {{pin.value}}) </span>
+				<select ng-change="setPinMode($index, pin.smode)"
+					class="pinMode" ng-model="pin.smode">
+					<option value="0">INPUT</option>
+					<option value="1">OUTPUT</option>
+					<option value="2">ANALOG</option>
+					<option value="4">SERVO</option>
+				</select>
+			</li>
+		</ul>
+	</div>
+	<canvas id="dashboard"></canvas>
+  </body>
+</html>

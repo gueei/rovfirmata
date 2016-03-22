@@ -22,15 +22,33 @@ document.hm.setup = function(board){
 	arduino.reportAnalogPin(0, 1);
 }
 
-document.hm.draw = function(ctx){
+document.hm.draw = function(ctx, gamepad){
 	ctx.fillStyle = "orange";
 	ctx.fillRect(0, 0, 500, 500);
 	ctx.save();
 	ctx.fillStyle = "blue";
-	ctx.translate(60, 100);
-	donut(ctx, arduino.pins[arduino.analogPins[0]].value/1024, 50);
-	ctx.translate(110, 0);
-	donut(ctx, arduino.pins[arduino.analogPins[0]].value/1024, 50);
+	ctx.translate(100, 200);
+	if(gamepad){
+		// axis 0 - Rotate
+		// axis 1 - Forward and backward
+		
+		powerBar(ctx, (gamepad.axes[0] + 1) / 2);
+		//donut(ctx, arduino.pins[arduino.analogPins[0]].value/1024, 50);
+		ctx.translate(110, 0);
+		//donut(ctx, arduino.pins[arduino.analogPins[0]].value/1024, 50);
+	}
+	ctx.restore();
+}
+
+var powerBar = function(ctx, percent, width, height){
+	width = width || 30;
+	height = height || 100;
+	ctx.save();
+	ctx.rotate(Math.PI);
+	ctx.fillStyle = "#333333";
+	ctx.fillRect(0, 0, width, height);
+	ctx.fillStyle = "yellow";
+	ctx.fillRect(0, 0, width, percent * height);
 	ctx.restore();
 }
 
